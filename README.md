@@ -1,4 +1,4 @@
-## Documentation of projects from CMU's [Learning Based Image Synthesis (S22)](https://learning-image-synthesis.github.io/sp22/)
+# [Learning Based Image Synthesis (S22)](https://learning-image-synthesis.github.io/sp22/) Projects
 
 ### Project 1: Colorizing the Prokudin-Gorskii Photo Collection
 
