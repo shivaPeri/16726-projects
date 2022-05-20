@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <meta charset="utf-8" />
+  </head>
+  <body>
+    <h1>Neural Style Transfer</h1>
+    <p>
+      Shiva Peri -
+      <a href="https://learning-image-synthesis.github.io/sp22/assignments/hw4"
+        >Assignment 4</a
+      >
+    </p>
+
+    <section>
+      <h2 class="centered">Part 1: Reconstruction Results</h2>
+      <p>
+        In part 1 of this assignment, we used the neural style transfer
+        optimization with pretrained vgg19 model architecture and minimized the
+        ContentLoss only. Ideally, the resultant image is a reconstruction of
+        the content image. Below we illustrate the impact of applying
+        ContentLoss after various convolutional blocks in the vgg19 feature
+        extractor. Clearly we can see that the earlier in the feature extractor
+        we observe the ContentLoss, the better the reconstruction. Conversely,
+        the later we observe the ContentLoss, the noisier the reconstruction.
+        This makes sense, as the feature dimensions get smaller deeper into the
+        network. As a result, there are less constraints to minimize, and more
+        of the noisy input image can remain unchanged.
+      </p>
+      <div
+        style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px"
+      >
+        <div>
+          <img src="assets/1_reconstruction/reconstructed_image_layer1.jpg" />
+          layer 1 (seed = 0)
+        </div>
+
+        <div>
+          <img src="assets/1_reconstruction/reconstructed_image_layer2.jpg" />
+          layer 2 (seed = 0)
+        </div>
+
+        <div>
+          <img
+            src="assets/1_reconstruction/reconstructed_image_layer2_seed10.jpg"
+          />
+          layer 2 (seed = 10)
+        </div>
+
+        <div>
+          <img src="assets/1_reconstruction/reconstructed_image_layer3.jpg" />
+          layer 3
+        </div>
+
+        <div>
+          <img src="assets/1_reconstruction/reconstructed_image_layer4.jpg" />
+          layer 4
+        </div>
+
+        <div>
+          <img src="assets/1_reconstruction/reconstructed_image_layer5.jpg" />
+          layer 5
+        </div>
+      </div>
+    </section>
+
+    <br />
+
+    <section>
+      <h2 class="centered">Part 2: Texture Synthesis Results</h2>
+      <p>
+        In part 2 of this assignment, we used the neural style transfer
+        optimization with pretrained vgg19 model architecture and minimized the
+        StyleLoss only. Ideally, the resultant image maintains the noise of the
+        input image, but has a stylized texture. Notably, the earlier in the
+        vgg19 architecture we observe the StyleLoss, the texture is stylized in
+        larger regions. As we observe the StyleLoss at deeper levels, the
+        texture is stylized at a finer grain. Note that observing the StyleLoss
+        after all convolutional blocks results in the qualitatively best
+        stylized texture. This is likely because both fine and course details
+        are maintained.
+
+        <br /><br />
+        *prior to this test, I used lr=1, however, with layer5 and lr=1, the
+        resultant image was entirely black. From this point on, all generated
+        images use lr=0.1
+      </p>
+      <div
+        style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px"
+      >
+        <div>
+          <img src="assets/2_texture_synthesis/texture_synthesis_layer1.jpg" />
+          layer 1 (seed = 0)
+        </div>
+
+        <div>
+          <img src="assets/2_texture_synthesis/texture_synthesis_layer2.jpg" />
+          layer 2 (seed = 0)
+        </div>
+
+        <div>
+          <img src="assets/2_texture_synthesis/texture_synthesis_layer3.jpg" />
+          layer 3 (seed = 0)
+        </div>
+
+        <div>
+          <img src="assets/2_texture_synthesis/texture_synthesis_layer4.jpg" />
+          layer 4 (seed = 0)
+        </div>
+
+        <div>
+          <img src="assets/2_texture_synthesis/texture_synthesis_layer5.jpg" />
+          layer 5* (seed = 0)
+        </div>
+
+        <div>
+          <img
+            src="assets/2_texture_synthesis/texture_synthesis_all_layers.jpg"
+          />
+          all layers (seed = 0)
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="centered">Part 3: Style Transfer Results</h2>
+      <p>
+        In the final part, we optimize the image according to both the
+        ContentLoss and StyleLoss. We can see qualitatively in all included
+        examples that using the content as the input image provides a better
+        result than using noise as the input image.
+
+        <br /><br />
+        Parameters used: ContentLoss after conv_4, StyleLoss after all conv
+        blocks, 300 iterations, style_weight=1000000, content_weight=1
+      </p>
+
+      <!-- FallingWater + StarryNight -->
+      <div
+        style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px"
+      >
+        <div>
+          <img class="square" src="assets/3_style_transfer/starry_night.jpeg" />
+          Style
+        </div>
+
+        <div>
+          <img class="square" src="assets/3_style_transfer/fallingwater.png" />
+          Content
+        </div>
+
+        <div>
+          <img
+            class="square"
+            src="assets/3_style_transfer/style_transfer_noise_2.jpg"
+          />
+          Noise Input (lr = 0.1)
+        </div>
+
+        <div>
+          <img
+            class="square"
+            src="assets/3_style_transfer/style_transfer_2.jpg"
+          />
+          Content Input (lr = 0.1)
+        </div>
+      </div>
+      <br />
+
+      <!-- Dancer + Picasso -->
+      <div
+        style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px"
+      >
+        <div>
+          <img class="square" src="assets/3_style_transfer/picasso.jpg" />
+          Style
+        </div>
+
+        <div>
+          <img class="square" src="assets/3_style_transfer/dancing.jpg" />
+          Content
+        </div>
+
+        <div>
+          <img
+            class="square"
+            src="assets/3_style_transfer/style_transfer_noise_3.jpg"
+          />
+          Noise Input (lr = 0.1)
+        </div>
+
+        <div>
+          <img
+            class="square"
+            src="assets/3_style_transfer/style_transfer_3.jpg"
+          />
+          Content Input (lr = 0.1)
+        </div>
+      </div>
+      <br />
+
+      <!-- Dog + Scream -->
+      <div
+        style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px"
+      >
+        <div>
+          <img class="square" src="assets/3_style_transfer/the_scream.jpeg" />
+          Style
+        </div>
+
+        <div>
+          <img class="square" src="assets/3_style_transfer/wally.jpg" />
+          Content
+        </div>
+
+        <div>
+          <img
+            class="square"
+            src="assets/3_style_transfer/style_transfer_noise_1.jpg"
+          />
+          Noise Input (lr = 0.1)
+        </div>
+
+        <div>
+          <img
+            class="square"
+            src="assets/3_style_transfer/style_transfer_1.jpg"
+          />
+          Content Input (lr = 0.1)
+        </div>
+
+        <div></div>
+        <div></div>
+
+        <div>
+          <img
+            class="square"
+            src="assets/3_style_transfer/style_transfer_noise_1_lr=0.5.jpg"
+          />
+          Noise Input (lr = 0.5)
+        </div>
+
+        <div>
+          <img
+            class="square"
+            src="assets/3_style_transfer/style_transfer_1_lr=0.5.jpg"
+          />
+          Content Input (lr = 0.5)
+        </div>
+      </div>
+      <br />
+    </section>
+  </body>
+</html>

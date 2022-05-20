@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- css -->
+    <link rel="stylesheet" type="text/css" href="style.css" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inconsolata&display=swap"
+      rel="stylesheet"
+    />
+    <meta charset="utf-8" />
+
+    <!-- scripts -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.1.9/p5.js"></script> -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.1.9/addons/p5.sound.min.js"></script> -->
+    <!-- <script src="main.js"></script> -->
+  </head>
+  <body>
+    <h1>Gradient Domain Fusion</h1>
+    <h5>
+      Shiva Peri -
+      <a href="https://learning-image-synthesis.github.io/sp22/assignments/hw2"
+        >Assignment 2</a
+      >
+    </h5>
+
+    <h3 class="centered">DESCRIPTION</h3>
+    <div>
+      The following images employ the use of the Poisson image blending. The
+      technique arises from the insight that gradients matching takes priority
+      over intensity matching. In other words, the shape of the image matters
+      more than the colors. In Poisson Image Blending, the gradients are formed
+      into a least-squares problem using a sparse matrix. The resulting image is
+      then re-shaped into the final output dimensions. Each color channel is
+      blended individually and the blended channels are recomposited at the end
+    </div>
+
+    <h3 class="centered">FAVORITE RESULT</h3>
+    <div>
+      <img src="assets/pterodactyl-source.jpg" />
+      source image
+
+      <img src="assets/pterodactyl_newsource.png" />
+      rescaled source image
+
+      <img src="assets/sky._mask.png" />
+      source mask
+
+      <img src="assets/pterodactyl-unblended.png" />
+      unblended masked image
+
+      <img src="assets/pterodactyl-blended.png" />
+      blended masked image
+
+      <img src="assets/pterodactly-closeup.png" />
+    </div>
+
+    <br />
+
+    <h3 class="centered">OTHER RESULTS</h3>
+    <div>
+      <div class="divider">
+        <img src="assets/cow-on-field.png" />
+        <div>
+          FAILURE CASE: This case fails to preserve the white upper part of the
+          cow. The source image had a white sky and a green ground. Because of
+          how the boundary pixels are handled by the blending algorithm, this
+          results in a green gradient across the cow.
+        </div>
+      </div>
+
+      <div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr">
+          <img src="assets/sharkfin-unblended.png" />
+          <img src="assets/sharkfin-blended.png" />
+        </div>
+        Here we have a shark fin in the water. This result blends well, due to
+        the similarity of the background colors of the source and target images.
+
+        <br />
+        <img src="assets/ship-closeup.png" />
+        The same target image does not work as well for this ship, due to the
+        differences in the background of the source image.
+      </div>
+    </div>
+  </body>
+</html>

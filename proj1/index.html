@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- css -->
+    <link rel="stylesheet" type="text/css" href="style.css" />
+  </head>
+  <body>
+    <h1>Colorizing the Prokudin-Gorskii Photo Collection</h1>
+    <h5>
+      Shiva Peri -
+      <a href="https://learning-image-synthesis.github.io/sp22/assignments/hw1"
+        >Assignment 1</a
+      >
+    </h5>
+
+    <h3 class="centered">WINDOW ALGORITHM</h3>
+    <div>
+      <ul>
+        <li>100px image window considered</li>
+        <li>Used recursive multiscale image pyramid (scale factor 0.3)</li>
+        <li>Base case: window size < 400px</li>
+        <li>+/- 15px displacements used</li>
+        <li>
+          Minimized
+          <a href="https://en.wikipedia.org/wiki/Structural_similarity"
+            >structural similarity index measure (SSIM)</a
+          >
+          as image distance metric.
+        </li>
+        <li>
+          considered weighted loss of RGB SSIM (weight 0.1) and gradient SSIM
+          (weight 1.0)
+        </li>
+      </ul>
+    </div>
+
+    <h3 class="centered">RESULTS</h3>
+    <div class="results">
+      <div>
+        <img src="assets/out-cathedral.jpg" />
+        <div class="centered">cathedral.jpg</div>
+      </div>
+      <div>
+        <img src="assets/out-emir.jpg" />
+        <div class="centered">emir.tif</div>
+      </div>
+      <div>
+        <img src="assets/out-harvesters.jpg" />
+        <div class="centered">harvesters.tif</div>
+      </div>
+      <div>
+        <img src="assets/out-icon.jpg" />
+        <div class="centered">icon.tif</div>
+      </div>
+      <div>
+        <img src="assets/out-lady.jpg" />
+        <div class="centered">lady.tif</div>
+      </div>
+      <div>
+        <img src="assets/out-self_portrait.jpg" />
+        <div class="centered">self_portrait.tif</div>
+      </div>
+      <div>
+        <img src="assets/out-three_generations.jpg" />
+        <div class="centered">three_generations.tif</div>
+      </div>
+      <div>
+        <img src="assets/out-train.jpg" />
+        <div class="centered">train.tif</div>
+      </div>
+      <div>
+        <img src="assets/out-turkmen.jpg" />
+        <div class="centered">turkmen.tif</div>
+      </div>
+      <div>
+        <img src="assets/out-village.jpg" />
+        <div class="centered">village.tif</div>
+      </div>
+    </div>
+    <br />
+    <div>
+      The only image which did not nicely align is icon.jpg. I suspect this is
+      because of the way in which I weighted dx, dy gradients over RGB
+      differences. However, if I did not weight the scores the way I did, the
+      other images would not have aligned.
+    </div>
+    <br />
+
+    <h3 class="centered">DISPLACEMENTS</h3>
+    <div>
+      <img src="assets/displacements.png" />
+    </div>
+
+    <h3 class="centered">BELLS & WHISTLES</h3>
+    <div>
+      <ul>
+        <li>auto-contrast</li>
+        <li>used gradients</li>
+      </ul>
+    </div>
+  </body>
+</html>

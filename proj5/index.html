@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <meta charset="utf-8" />
+  </head>
+  <body>
+    <h1>GAN Photo Editing</h1>
+    <p>
+      Shiva Peri -
+      <a href="https://learning-image-synthesis.github.io/sp22/assignments/hw5"
+        >Assignment 5</a
+      >
+    </p>
+
+    <section>
+      <h2 class="centered">Part 1: Inverting the Generator</h2>
+      <p>
+        In this part, we try to reconstruct a target image using various latent
+        space encodings (<i>Z, W, W+</i>). We also compare various weightings of
+        L1 pixel loss and Perceptual loss. In all of the images below,
+        l1_wgt=10. Qualitatively, the best results occur when the weightings of
+        the L1 and Perceptual losses are equal. Another note is that StyleGan
+        drastically outperforms VanillaGan in terms of the quality of the
+        reconstructions
+      </p>
+      <div
+        style="
+          display: grid;
+          grid-template-columns: 50px repeat(5, 1fr);
+          gap: 10px;
+        "
+      >
+        <div class="centered">perc_wgt</div>
+        <div class="centered">Target</div>
+        <div class="centered">VanillaGan Z</div>
+        <div class="centered">StyleGan Z</div>
+        <div class="centered">StyleGan W</div>
+        <div class="centered">StyleGan W+</div>
+
+        <!-- 0.01 -->
+        <div class="centered">0.01</div>
+        <img src="assets/1_project/0_data.png" />
+        <img src="assets/1_project/0_vanilla_z_0.01_1000.png" />
+        <img src="assets/1_project/0_stylegan_z_0.01_1000.png" />
+        <img src="assets/1_project/0_stylegan_w_0.01_1000.png" />
+        <img src="assets/1_project/0_stylegan_w+_0.01_1000.png" />
+
+        <!-- 0.1 -->
+        <div class="centered">0.1</div>
+        <img src="assets/1_project/0_data.png" />
+        <img src="assets/1_project/0_vanilla_z_0.1_1000.png" />
+        <img src="assets/1_project/0_stylegan_z_0.1_1000.png" />
+        <img src="assets/1_project/0_stylegan_w_0.1_1000.png" />
+        <img src="assets/1_project/0_stylegan_w+_0.1_1000.png" />
+
+        <!-- 1. -->
+        <div class="centered">1</div>
+        <img src="assets/1_project/0_data.png" />
+        <img src="assets/1_project/0_vanilla_z_1_1000.png" />
+        <img src="assets/1_project/0_stylegan_z_1_1000.png" />
+        <img src="assets/1_project/0_stylegan_w_1_1000.png" />
+        <img src="assets/1_project/0_stylegan_w+_1_1000.png" />
+
+        <!-- 10. -->
+        <div class="centered">10</div>
+        <img src="assets/1_project/0_data.png" />
+        <img src="assets/1_project/0_vanilla_z_10_1000.png" />
+        <img src="assets/1_project/0_stylegan_z_10_1000.png" />
+        <img src="assets/1_project/0_stylegan_w_10_1000.png" />
+        <img src="assets/1_project/0_stylegan_w+_10_1000.png" />
+
+        <!-- 100. -->
+        <div class="centered">100</div>
+        <img src="assets/1_project/0_data.png" />
+        <img src="assets/1_project/0_vanilla_z_100_1000.png" />
+        <img src="assets/1_project/0_stylegan_z_100_1000.png" />
+        <img src="assets/1_project/0_stylegan_w_100_1000.png" />
+        <img src="assets/1_project/0_stylegan_w+_100_1000.png" />
+
+        <!-- 1000. -->
+        <div class="centered">1000</div>
+        <img src="assets/1_project/0_data.png" />
+        <img src="assets/1_project/0_vanilla_z_1000_1000.png" />
+        <img src="assets/1_project/0_stylegan_z_1000_1000.png" />
+        <img src="assets/1_project/0_stylegan_w_1000_1000.png" />
+        <img src="assets/1_project/0_stylegan_w+_1000_1000.png" />
+      </div>
+    </section>
+
+    <br />
+
+    <section>
+      <h2 class="centered">Part 2: Interpolate your Cats</h2>
+      <p>
+        In this part, we interpolate between reconstructions of two different
+        cats. From the last part, we used the same weightings for L1 loss and
+        Perceptual loss. Qualitatively, the <i>W, W+</i> latent spaces produced
+        better interpolation results than the <i>Z</i> space.
+      </p>
+      <div
+        style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px"
+      >
+        <div>StyleGan Z</div>
+        <div>StyleGan W</div>
+        <div>StyleGan W+</div>
+
+        <img src="assets/2_interpolate/1_stylegan_z.gif" />
+        <img src="assets/2_interpolate/1_stylegan_w.gif" />
+        <img src="assets/2_interpolate/1_stylegan_w+.gif" />
+
+        <img src="assets/2_interpolate/3_stylegan_z.gif" />
+        <img src="assets/2_interpolate/3_stylegan_w.gif" />
+        <img src="assets/2_interpolate/3_stylegan_w+.gif" />
+      </div>
+    </section>
+
+    <section>
+      <h2 class="centered">Part 3: Scribble to Image</h2>
+      <p>
+        In this part, we use a masked scribble image to optimize a latent noise
+        parameter into a minimized image. Ideally, the resultant cats retain the
+        features of the input scribble. Qualitatively, the best results came
+        from the <i>W</i> latent space. Overall, however, the results are not
+        that great. The best results come from when the perc_wgt equals the
+        l1_wgt.
+      </p>
+      <div
+        style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px"
+      >
+        <div>Scribble</div>
+        <div>StyleGan W (perc_wgt=10)</div>
+        <div>StyleGan W (perc_wgt=100)</div>
+        <div>StyleGan W+ (perc_wgt=10)</div>
+        <div>StyleGan W+ (perc_wgt=100)</div>
+
+        <img src="assets/3_draw/data/0_data.png" />
+        <img src="assets/3_draw/draw_w_perc_wgt=10/0_out.png" />
+        <img src="assets/3_draw/draw_w_perc_wgt=100/0_out.png" />
+        <img src="assets/3_draw/draw_w+_perc_wgt=10/0_out.png" />
+        <img src="assets/3_draw/draw_w+_perc_wgt=100/0_out.png" />
+
+        <img src="assets/3_draw/data/1_data.png" />
+        <img src="assets/3_draw/draw_w_perc_wgt=10/1_out.png" />
+        <img src="assets/3_draw/draw_w_perc_wgt=100/1_out.png" />
+        <img src="assets/3_draw/draw_w+_perc_wgt=10/1_out.png" />
+        <img src="assets/3_draw/draw_w+_perc_wgt=100/1_out.png" />
+
+        <img src="assets/3_draw/data/2_data.png" />
+        <img src="assets/3_draw/draw_w_perc_wgt=10/2_out.png" />
+        <img src="assets/3_draw/draw_w_perc_wgt=100/2_out.png" />
+        <img src="assets/3_draw/draw_w+_perc_wgt=10/2_out.png" />
+        <img src="assets/3_draw/draw_w+_perc_wgt=100/2_out.png" />
+
+        <img src="assets/3_draw/data/3_data.png" />
+        <img src="assets/3_draw/draw_w_perc_wgt=10/3_out.png" />
+        <img src="assets/3_draw/draw_w_perc_wgt=100/3_out.png" />
+        <img src="assets/3_draw/draw_w+_perc_wgt=10/3_out.png" />
+        <img src="assets/3_draw/draw_w+_perc_wgt=100/3_out.png" />
+
+        <img src="assets/3_draw/data/4_data.png" />
+        <img src="assets/3_draw/draw_w_perc_wgt=10/4_out.png" />
+        <img src="assets/3_draw/draw_w_perc_wgt=100/4_out.png" />
+        <img src="assets/3_draw/draw_w+_perc_wgt=10/4_out.png" />
+        <img src="assets/3_draw/draw_w+_perc_wgt=100/4_out.png" />
+
+        <img src="assets/3_draw/data/5_data.png" />
+        <img src="assets/3_draw/draw_w_perc_wgt=10/5_out.png" />
+        <img src="assets/3_draw/draw_w_perc_wgt=100/5_out.png" />
+        <img src="assets/3_draw/draw_w+_perc_wgt=10/5_out.png" />
+        <img src="assets/3_draw/draw_w+_perc_wgt=100/5_out.png" />
+
+        <img src="assets/3_draw/data/6_data.png" />
+        <img src="assets/3_draw/draw_w_perc_wgt=10/6_out.png" />
+        <img src="assets/3_draw/draw_w_perc_wgt=100/6_out.png" />
+        <img src="assets/3_draw/draw_w+_perc_wgt=10/6_out.png" />
+        <img src="assets/3_draw/draw_w+_perc_wgt=100/6_out.png" />
+
+        <img src="assets/3_draw/data/7_data.png" />
+        <img src="assets/3_draw/draw_w_perc_wgt=10/7_out.png" />
+        <img src="assets/3_draw/draw_w_perc_wgt=100/7_out.png" />
+        <img src="assets/3_draw/draw_w+_perc_wgt=10/7_out.png" />
+        <img src="assets/3_draw/draw_w+_perc_wgt=100/7_out.png" />
+      </div>
+    </section>
+  </body>
+</html>

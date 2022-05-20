@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <meta charset="utf-8" />
+  </head>
+  <body>
+    <h1>When Cats meet GANs</h1>
+    <p>
+      Shiva Peri -
+      <a href="https://learning-image-synthesis.github.io/sp22/assignments/hw3"
+        >Assignment 3</a
+      >
+    </p>
+
+    <section>
+      <h2 class="centered">VanillaGan Results</h2>
+      <p>
+        The VanillaGan consists of a DCDiscriminator and a DCGenerator (DC =
+        Deep Convolutional). Here we compare the results of two different data
+        augmentation transforms: basic and deluxe. The basic transform is simply
+        a simple rescaling and normalization operation. The deluxe transform
+        additionally has random crops, random horizontal flips, and color jitter
+        operations. <br />
+        <br />
+        Additionally, we also compare the results of applying
+        <a href="https://arxiv.org/pdf/2006.10738.pdf"
+          >Differentiable Augmentation</a
+        >. With both the basic and deluxe data augmentation, using DiffAug
+        results in signifigcantly better results. As shown in the loss plots,
+        the discriminator loss converges slower than without DiffAug and the
+        generator loss converges faster than without DiffAug. The additional
+        transforms in the deluxe data augmentation allow VanillaGan to train on
+        much more diverse data. Hence, the results are much more robost. Notably
+        the deluxe results after 1000 iterations are comparable to the results
+        of the basic transform with DiffAug.
+      </p>
+      <p>
+        Padding calculation: <br />
+        padding = (stride * (output_size - 1) + kernel_size - input_size) // 2
+        <br />
+        padding = (2 * (32 - 1) + 4 - 64) // 2 = 1 <br /><br />
+
+        In my implementation, I used kernel_size = 5, padding = 2
+      </p>
+      <div>
+        <div class="divider">
+          <div>
+            <img src="./assets/vanillagan/basic-006000.png" />
+            <div>Basic (iter 6000)</div>
+          </div>
+
+          <div>
+            <img src="./assets/vanillagan/basic-diffaug-006000.png" />
+            <div>Basic + DiffAug (iter 6000)</div>
+          </div>
+
+          <div>
+            <img src="./assets/vanillagan/basic_D_loss.png" />
+            <div>Basic Discriminator Loss</div>
+            <p>
+              orange = basic <br />
+              blue = basic + diffaug
+            </p>
+          </div>
+
+          <div>
+            <img src="./assets/vanillagan/basic_G_loss.png" />
+            <div>Basic Generator Loss</div>
+            <p>
+              orange = basic <br />
+              blue = basic + diffaug
+            </p>
+          </div>
+        </div>
+
+        <br />
+
+        <div class="divider">
+          <div>
+            <img src="./assets/vanillagan/deluxe-000200.png" />
+            <div>Deluxe (iter 200)</div>
+          </div>
+
+          <div>
+            <img src="./assets/vanillagan/deluxe-diffaug-000200.png" />
+            <div>Deluxe + DiffAug (iter 200)</div>
+          </div>
+
+          <div>
+            <img src="./assets/vanillagan/deluxe-006000.png" />
+            <div>Deluxe (iter 6000)</div>
+          </div>
+
+          <div>
+            <img src="./assets/vanillagan/deluxe-diffaug-006000.png" />
+            <div>Deluxe + DiffAug (iter 6000)</div>
+          </div>
+
+          <div>
+            <img src="./assets/vanillagan/deluxe_D_loss.png" />
+            <div>Deluxe Discriminator Loss</div>
+            <p>
+              red = deluxe <br />
+              blue = deluxe + diffaug
+            </p>
+          </div>
+
+          <div>
+            <img src="./assets/vanillagan/deluxe_G_loss.png" />
+            <div>Deluxe Generator Loss</div>
+            <p>
+              red = deluxe <br />
+              blue = deluxe + diffaug
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <br />
+
+    <section>
+      <h2 class="centered">CycleGan Results</h2>
+      <p>
+        The main difference between the VanillaGan and the CycleGan is that
+        CycleGan involves training multiple generators and discriminators in
+        tandem. Creating transformation networks between two datasets (X, Y)
+        allows use to minimize a cyclical optimization problem. This allows
+        CycleGan to train roboustly as well as gives use an approach for style
+        transfer. <br />
+        <br />
+
+        The first two rows below demonstrate the striking difference between
+        including and not including cycle loss while training the generators.
+        After 1000 iterations the network which considers cycle loss produces
+        far fewer artifacts than the network which does not. After 10000
+        iterations the network with cycle loss continues to improve. <br />
+        <br />
+
+        In the final two rows (on the Cats dataset) we see a comparison of
+        PatchDiscriminator and DCDiscriminator. Using the PatchDiscriminator
+        visually results in fewer artifacts than DCDiscriminator for both
+        domains after 10000 iterations. We see similar results in the
+        Apple2Orange Dataset as well.
+      </p>
+      <div>
+        <h3>Cats Dataset</h3>
+        <div class="divider">
+          <div>
+            <img
+              src="./assets/cyclegan/cats/patch-no-cycle/sample-001000-X-Y.png"
+            />
+            <div>X-Y, Patch, No-Cycle (iter 1000)</div>
+          </div>
+
+          <div>
+            <img
+              src="./assets/cyclegan/cats/patch-no-cycle/sample-001000-Y-X.png"
+            />
+            <div>Y-X, Patch, No-Cycle (iter 1000)</div>
+          </div>
+
+          <div>
+            <img src="./assets/cyclegan/cats/patch/sample-001000-X-Y.png" />
+            <div>X-Y, Patch (iter 1000)</div>
+          </div>
+
+          <div>
+            <img src="./assets/cyclegan/cats/patch/sample-001000-Y-X.png" />
+            <div>Y-X, Patch (iter 1000)</div>
+          </div>
+
+          <div>
+            <img src="./assets/cyclegan/cats/patch/sample-010000-X-Y.png" />
+            <div>X-Y, Patch (iter 10000)</div>
+          </div>
+
+          <div>
+            <img src="./assets/cyclegan/cats/patch/sample-010000-Y-X.png" />
+            <div>Y-X, Patch (iter 10000)</div>
+          </div>
+
+          <div>
+            <img src="./assets/cyclegan/cats/dc/sample-010000-X-Y.png" />
+            <div>X-Y, DC (iter 10000)</div>
+          </div>
+
+          <div>
+            <img src="./assets/cyclegan/cats/dc/sample-010000-Y-X.png" />
+            <div>Y-X, DC (iter 10000)</div>
+          </div>
+        </div>
+
+        <br />
+
+        <h3>Apple2Orange Dataset</h3>
+        <div class="divider">
+          <div>
+            <img src="./assets/cyclegan/fruits/patch/sample-010000-X-Y.png" />
+            <div>X-Y, Patch (iter 10000)</div>
+          </div>
+
+          <div>
+            <img src="./assets/cyclegan/fruits/patch/sample-010000-Y-X.png" />
+            <div>Y-X, Patch (iter 10000)</div>
+          </div>
+
+          <div>
+            <img src="./assets/cyclegan/fruits/dc/sample-010000-X-Y.png" />
+            <div>X-Y, DC (iter 10000)</div>
+          </div>
+
+          <div>
+            <img src="./assets/cyclegan/fruits/dc/sample-010000-Y-X.png" />
+            <div>Y-X, DC (iter 10000)</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>

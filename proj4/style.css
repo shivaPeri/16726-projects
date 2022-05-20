@@ -1,0 +1,33 @@
+body {
+  padding-top: 100px;
+  padding-bottom: 100px;
+  max-width: 800px;
+  margin: auto;
+}
+
+div {
+  margin-top: 5;
+  margin-bottom: 5;
+}
+
+img {
+  width: 100%;
+}
+
+img.square {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+}
+
+.centered {
+  text-align: center;
+}
+
+div {
+  display: grid;
+}
+
+th {
+  width: 25%;
+}

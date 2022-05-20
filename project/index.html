@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <meta charset="utf-8" />
+  </head>
+  <body>
+    <h1>3D Mesh Interpolation</h1>
+    <p>
+      Shiva Peri, Nick Diamant, Himalini Gururaj -
+      <a href="https://learning-image-synthesis.github.io/sp22/assignments/hw3"
+        >Assignment 3</a
+      >
+    </p>
+
+    <section>
+      <h2 class="centered">Objective</h2>
+      <p>
+        The motivation for this projects follows from these papers:
+        <a href="https://arxiv.org/pdf/2202.08345v1.pdf"
+          >Learning Smooth Neural Functions via Lipschitz Regularization</a
+        >, and
+        <a href="https://arxiv.org/pdf/1901.05103.pdf"
+          >DeepSDF: Learning Continuous Signed Distance Functions for Shape
+          Representation</a
+        >. We wanted to apply the interpolation techniques described to arbitary
+        input meshes. As artists, we were curious what meshes would potentially
+        'break' these interpolation methods.
+      </p>
+    </section>
+
+    <br />
+
+    <section>
+      <h2 class="centered">Method 1: Learning Approach</h2>
+
+      <section>
+        <h4 class="centered">Architecture</h4>
+        <div style="display: grid; gap: 20px">
+          <div>
+            The learning based approach involves using the DeepSDF architecture
+            with Lipschitz regularization. The key insight into this approach is
+            understanding how neural fields are encoded as signed distance
+            functions (SDFs). In the left image below, we can see that an input
+            latent vector (blue) concatenated with an input query point (gray)
+            is fed into the DeepSDF network. The output SDF (yellow) returns a
+            float value representing how close or far from the surface the query
+            point is
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 2fr">
+            <img src="assets/latent_to_SDF.png" />
+            <img src="assets/architecture.png" />
+          </div>
+          <div>
+            The right image above shows the DeepSDF architecture. In our
+            implementation, we used five fully connected layers with TanH
+            activations, LayerNorm, and Lipschitz regularization. While the
+            DeepSDF paper notes that using a random latent vector which is
+            optimized during training provides better results, we used the
+            one-hot encoding. That is, given let's say three input meshes (A, B,
+            C), the corresponding latent vectors would be [1, 0, 0], [0, 1, 0],
+            [0, 0, 1]
+          </div>
+          <div>
+            We used MSELoss between the ground truth SDF and our network's
+            predicted SDF. Additionally, we added in a Lipschitz regularization
+            term for interpolation stability.
+          </div>
+        </div>
+      </section>
+
+      <br />
+      <section>
+        <h4 class="centered">Reconstruction Results</h4>
+        <div>
+          The first task we attempted was a simple reconstruction of two input
+          meshes. As a result, out latent vector dimension is 2, with the input
+          vector having dimension 2 + 3 = 5, including the query point. Below,
+          we display the input mesh and the ground truth point cloud
+          representation of the input mesh. Note in the point cloud
+          visualizations, red points denote positive signed distances from the
+          surface and blue points denote negative signed distances.
+        </div>
+        <br />
+        <div>
+          The right two columns are our reconstruction results. The point cloud
+          (PC) reconstruction shows a grainier version of the ground truth. From
+          the latent SDF, we used marching cubes (MC) to reconstruct a mesh,
+          which we rendered in Blender.
+        </div>
+        <br />
+        <div
+          style="
+            display: grid;
+            gap: 10px;
+            grid-template-columns: repeat(4, 1fr);
+          "
+        >
+          <div>Input Mesh</div>
+          <div>Ground Truth PC</div>
+          <div>PC Reconstruction</div>
+          <div>MC Reconstruction</div>
+
+          <img src="assets/bowl_input_mesh.png" />
+          <img src="assets/bowl_ground_truth.png" />
+          <img src="assets/[1,0].png" />
+          <img src="assets/0001.png" />
+
+          <img src="assets/spiky_input_mesh.png" />
+          <img src="assets/spiky_ground_truth.png" />
+          <img src="assets/[0,1].png" />
+          <img src="assets/0050.png" />
+        </div>
+      </section>
+
+      <section>
+        <h4 class="centered">Interpolation Results</h4>
+        <div>
+          Following from the above reconstructions, we used the same input
+          meshes to describe interpolations. We denoted the bowl mesh as [1, 0]
+          and the spiky mesh as [0, 1]. Below we visualize various
+          interpolations in the latent space. The left depicts a linear
+          interpolation between the direct encodings of the two meshes. The
+          middle image depicts an interpolation from the opposite corners of the
+          latent space. The right image depicts a circular path centered at [.5,
+          .5] with radius .5. Both the right two images demonstrate the
+          smoothness of the latent space, even with extrapolated latent values.
+        </div>
+        <br />
+        <div
+          style="
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+          "
+        >
+          <div>
+            <img src="assets/latent_blend.gif" />
+            Lerp from [1, 0] to [0, 1]
+          </div>
+
+          <div>
+            <img src="assets/latent_diag.gif" />
+            Lerp from [1, 1] to [0, 0]
+          </div>
+          <div>
+            <img src="assets/latent_circle.gif" />
+            Circular path
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <br />
+
+    <section>
+      <h2 class="centered">Method 2: Classical Interpolation</h2>
+      <div>
+        In addition to a learning based approach, we also used classical
+        interpolation techniques to interpolate between two meshes. Here, we
+        start with the ground truth SDFs of two meshes. We sample these SDFs on
+        a 64x64x64 voxel grid. The SDF values are then linearly interpolated
+        between the two voxel grids. The voxel grids are converted into meshes
+        via marching cubes. Below, we visualize some results. Notably, the
+        learning based approach has fewer artifacts.
+      </div>
+      <br />
+
+      <div
+        style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px"
+      >
+        <img src="assets/classic_interpolation_1.gif" />
+        <img src="assets/classic_interpolation_2.gif" />
+      </div>
+    </section>
+  </body>
+</html>
