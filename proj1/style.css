@@ -6,11 +6,9 @@ body {
 }
 
 div.results {
-  height: 300px;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 10px;
-  overflow: auto;
 }
 
 img {
